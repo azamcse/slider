@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>slider</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            width: 100%;
+            min-height:100vh;
+            display: flex;
+            align-items: center;
+            justify-content:center;
+            background-color: #efefef;
+        }
+
+        .wrapper{
+            max-width: 650px;
+            width: 100%;
+            height: 300px;
+            background-color: #fff;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .carousel_container{
+            width: calc(100% - 200px);
+            height: calc(100% - 50px);
+            margin: 25px auto;
+            border-radius:8px;
+            overflow: hidden;
+        }
+
+        .carousel{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: all .5s ease-in-out;
+            border-radius: 8px;
+        }
+
+        .slideItem{
+            min-width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            border-radius: 18px;
+            border: 10px solid #fff;
+        }
+
+        /* controller */
+
+        .controllerBtn{
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .prevBtn{
+            left: 30px;
+        }
+        .nextBtn{
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="wrapper" id="wrapper">
+        <div class="carousel_container">
+            <div class="carousel" id="carousel">
+                <img class="slideItem" src="https://i.ibb.co/d2SRbrP/pexels-photo-12319685.webp" alt="pexels-photo-12319685">
+                <img class="slideItem" src="https://i.ibb.co/fMvRp6V/Image-8.png" alt="Image-8">
+                <img class="slideItem" src="https://i.ibb.co/4m0PTGT/Image-8.png" alt="Image-8">
+                <img class="slideItem" src="https://i.ibb.co/LgV2R3H/1-1.jpg" alt="1-1">
+                <img src="https://i.ibb.co/d6cqy5R/dkwp-Rh-Nxxu-Njekz-GDy-UYPf.jpg" alt="dkwp-Rh-Nxxu-Njekz-GDy-UYPf">
+                <img class="slideItem" src="https://i.ibb.co/d2SRbrP/pexels-photo-12319685.webp" alt="pexels-photo-12319685">
+                <img class="slideItem" src="https://i.ibb.co/fMvRp6V/Image-8.png" alt="Image-8">
+                <img class="slideItem" src="https://i.ibb.co/4m0PTGT/Image-8.png" alt="Image-8">
+                <img class="slideItem" src="https://i.ibb.co/LgV2R3H/1-1.jpg" alt="1-1">
+                <img src="https://i.ibb.co/d6cqy5R/dkwp-Rh-Nxxu-Njekz-GDy-UYPf.jpg" alt="dkwp-Rh-Nxxu-Njekz-GDy-UYPf">
+             </div>
+        </div>
+
+
+        <div class="controller">
+            <span class="prevBtn controllerBtn" id="prevBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="7.119" height="13.017" viewBox="0 0 7.119 13.017"> <path id="angle-left" d="M12,.755a.75.75,0,0,1-.22.53L7.945,5.123a1.25,1.25,0,0,0,0,1.769l3.832,3.832a.75.75,0,1,1-1.061,1.061L6.884,7.955a2.754,2.754,0,0,1,0-3.891L10.721.224A.75.75,0,0,1,12,.755Z" transform="translate(-5.383 0.513)" fill="#1e272e" stroke="#1e272e" stroke-width="1"></path> </svg>
+            </div>
+            <span class="nextBtn controllerBtn" id="nextBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="7.119" height="13.017" viewBox="0 0 7.119 13.017"> <path id="angle-left" d="M6.079.755a.75.75,0,0,0,.22.53l3.837,3.837a1.25,1.25,0,0,1,0,1.769L6.3,10.724a.75.75,0,1,0,1.061,1.061L11.2,7.955a2.754,2.754,0,0,0,0-3.891L7.36.224A.75.75,0,0,0,6.079.755Z" transform="translate(-5.579 0.513)" fill="#1e272e" stroke="#1e272e" stroke-width="1"></path> </svg> 
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        const wrapper = document.getElementById("wrapper"),
+              carousel = document.getElementById("carousel"),
+              slideItem = document.querySelectorAll(".slideItem");
+              prevBtn = document.getElementById("prevBtn");
+              nextBtn = document.getElementById("nextBtn");
+
+        let imgIndex = 1,
+            intervalId;
+
+        const autoSlide = ()=> {
+            intervalId = setInterval(()=> imgSlide(++imgIndex) , 2000)
+        }
+        autoSlide()
+
+        const imgSlide = ()=> {
+            imgIndex = imgIndex === slideItem.length ? 0 : imgIndex < 0 ? slideItem.length - 1 : imgIndex;
+           carousel.style.transform = `translate(-${imgIndex * 100}%)`;
+           console.log(imgIndex)
+        }
+
+        wrapper.addEventListener("mouseover" , ()=> clearInterval(intervalId));
+        wrapper.addEventListener("mouseleave" , ()=> autoSlide());
+
+
+       const updatePrev = (e)=>{
+            clearInterval(intervalId);
+            imgIndex += e.target.id === "nextBtn" ? 1 : -1;
+            imgSlide(imgIndex)
+        }
+
+        const updateNext = (e)=>{
+            clearInterval(intervalId);
+            imgIndex += e.target.id === "prevBtn" ? -1 : 1;
+            imgSlide(imgIndex)
+        }
+
+        prevBtn.addEventListener("click" , updatePrev);
+        nextBtn.addEventListener("click" , updateNext)
+
+
+
+    </script>
+
+</body>
+</html>
